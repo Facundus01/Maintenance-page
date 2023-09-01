@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Store{
+id String @id @default(uuid())
+name String
+userId String
+maintenances Maintenance[] @relation("StoreToMaintenance")
+createdAt DateTime @default(now())
+updateAt DateTime @updatedAt
+}
+
+model Maintenance{
+  id String @id @default(uuid())
+  storeId String
+  store Store @relation("StoreToMaintenance", fields: [storeId], references: [id])
+  model String
+  make String
+  imageUrl String
+  fuel_type String
+  year Int
+  price Decimal
+  createdAt DateTime @default(now())
+  updated DateTime @updatedAt
+  @@index([storeId])
+}
+
